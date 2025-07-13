@@ -21,7 +21,28 @@ libros = [
     'socio_prestado': None
     }
 ]
-socios = []
+socios = [
+    {
+        'nombre': 'Ana Torres',
+        'codigo': '001',
+        'correo': 'ana.torres@example.com',
+        'estado': 'registrado'
+    },
+    {
+        'nombre': 'Luis Gómez',
+        'codigo': '002',
+        'correo': 'luis.gomez@example.com',
+        'estado': 'registrado'
+    },
+    {
+        'nombre': 'Camila Ríos',
+        'codigo': '003',
+        'correo': 'camila.rios@example.com',
+        'estado': 'registrado'
+    }
+
+
+]
 contador = 1
 
 
@@ -86,9 +107,43 @@ def registrar_libro():
 print("")
 def registrar_socio():
     global socios
+    print("")
     print ("Registrar usuarios 👥")
+    print("Digite 0 para volver al menú principal")
     
     nombre = input("Nombre del usuario: ").strip().lower()
+    if not nombre:
+        print("❌ El nombre del usuario no puede estar vacío ❌")
+        registrar_socio()
+    if nombre == '0': return
+    
+    codigo = input ("Digite el código del usuario: ").strip()
+    if not codigo:
+        print("❌ El código del usuario no puede estar vacío ❌")
+        registrar_socio()
+    if codigo == '0': return
+    
+    correo = input ("Digite el correo electrónico:").strip().lower()
+    if not correo:
+        print("❌ El correo del usuario no puede estar vacío ❌")
+        registrar_socio()
+    if correo == '0': return
+    
+    for s in socios:
+        if s ['codigo'] == codigo:
+            print(f"❌ Ya existe un usuario registrado con el código {codigo}, por favor, digita uno nuevo ❌")
+            
+    nuevo_socio = {
+        'nombre': nombre,
+        'codigo': codigo,
+        'correo': correo,
+        'estado': 'registrado'
+    }
+    socios.append(nuevo_socio)
+    print("")
+    print(f"Usuario {nombre} registrado exitosamente con el código {codigo} 👥")
+    print(f"Correo del usuario:{correo}")
+    print("")
 
 def prestar_libro():
     pass
@@ -117,7 +172,19 @@ def todos_libros():
     
 
 def ver_socios():
-    pass
+   print("")
+   print("Lista de usuarios registrados 👥")
+   print("")
+   
+   if not socios:
+       print("❌ No hay usuarios registrados en el sistema ❌")
+       return
+   for i, socio in enumerate(socios, 1):
+       print(f"{i}. Nombre del usuario: {socio["nombre"]}")
+       print(f"   Código de registro: {socio["codigo"]}")
+       print(f"   Correo del usuario: {socio["correo"]}")
+       print("")
+         
     
 def main():
     #Función principal del programa
