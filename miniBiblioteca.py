@@ -137,7 +137,8 @@ def registrar_socio():
         'nombre': nombre,
         'codigo': codigo,
         'correo': correo,
-        'estado': 'registrado'
+        'estado': 'registrado',
+        'librosPrestados': None
     }
     socios.append(nuevo_socio)
     print("")
@@ -146,13 +147,92 @@ def registrar_socio():
     print("")
 
 def prestar_libro():
-    pass
+    global libros , socios
+    
+    #Solicitar ISBN del libro
+    print("📚 Préstamo de libros 📚")
+    print("Digita 0 para volver al menú principal")
+    print("")
+    isbn = input("Digita el ISBN del libro: ")
+    if not isbn:
+        print("❌ El ISBN del libro no puede estar vacío ❌")
+        prestar_libro()
+    if isbn == '0': return
+    
+    #Buscar libro
+    libro_encontrado = None
+    for libro in libros:
+        if libro['isbn'] == isbn:
+            libro_encontrado = libro
+            break
+    
+    if not libro_encontrado:
+        print(f"No se encontró un libro con el ISBN {isbn}").strip().lower()
+    
+    #Buscar usuario
+    codigo_usuario = input("Digita el código del usuario: ")
+    if not codigo_usuario:
+        print("❌ El ID del usuario no puede estar vacío ❌")
+        prestar_libro()
+    if codigo_usuario == '0': return
+    
+    usuario_encontrado = None
+    for socio in socios:
+        if socio['codigo'] == codigo_usuario:
+            usuario_encontrado = socio
+            break
+    
+    #Verificación de disponibilidad del libro
+    libro_disponible = None    
+    for libro in libros:
+        if libro['estado'] == 'Disponible':
+            libro_disponible = True
+            break
+    if not libro_disponible:
+            print(f"El libro {libro['titulo']} no se encuentra disponible")
+            return
+        
+    libro_encontrado['estado'] = 'Prestado'
+    libro_encontrado['socio_prestado'] = codigo_usuario
+    
+    print(f"El libro {libro['titulo']} fue prestado exitosamente al usuario {socio['nombre']}")
+            
+            
 
 def devolver_libro():
-    pass
+    global libros
+    isbn = input("Digita el ISBN del libro: ")
+    if not isbn:
+        print("❌ El ISBN del libro no puede estar vacío ❌")
+        devolver_libro()
+    if isbn == '0': return
+    
+    #Buscar libro
+    libro_encontrado = None
+    for libro in libros:
+        if libro['isbn'] == isbn:
+            libro_encontrado = libro
+            break
+    
+    if not libro_encontrado:
+        print(f"No se encontró un libro con el ISBN {isbn}").strip().lower()
+        return
+    libro_encontrado['estado'] = 'Disponible'
+    libro_encontrado['socio_prestado'] = None
+    print("Libro devuelto exitosamente")
+    
 
 def libros_prestados():
-    pass
+    
+    for i, libro in enumerate(libros, 1):
+        if libro ['estado'] == 'Prestado':
+            print(f"{i}. Nombre del libro: {libro["titulo"]}")
+            print(f"   Autor: {libro["autor"]}")
+            print(f"   ISBN: {libro["isbn"]}")
+            print(f"   Usuario: {libro['socio_prestado']}")
+            print("")
+    
+        
 
 def todos_libros():
     print("")
@@ -183,6 +263,7 @@ def ver_socios():
        print(f"{i}. Nombre del usuario: {socio["nombre"]}")
        print(f"   Código de registro: {socio["codigo"]}")
        print(f"   Correo del usuario: {socio["correo"]}")
+       print(f"   Estado: {socio["estado"]}")
        print("")
          
     
